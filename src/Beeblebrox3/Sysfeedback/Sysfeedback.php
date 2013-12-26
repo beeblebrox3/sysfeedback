@@ -19,17 +19,17 @@ class Sysfeedback {
     public static function render() {
         foreach(self::$types as $type) {
             $_type = 'sys-'.$type;
-            if(Session::has($_type)) {
-                self::html($type, Session::get($_type));
-                Session::forget($_type);
+            if(\Session::has($_type)) {
+                self::html($type, \Session::get($_type));
+                \Session::forget($_type);
             }
         }
     }
 
     private static function addMessage($type, $message) {
-        $messages = (array) Session::get($type);
+        $messages = (array) \Session::get($type);
         $messages[] = $message;
-        Session::put($type, $messages);
+        \Session::put($type, $messages);
     }
 
     private static function html($class, $messages) {
