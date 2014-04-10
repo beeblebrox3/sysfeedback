@@ -2,24 +2,30 @@
 
 namespace Beeblebrox3\Sysfeedback;
 
-/*
-    On Controller, use
-    Sysfeedback::success("mensagem"); // store a success message
-
-    On view/layout, use
-    Sysfeedback::render(); // show all existing messages
-*/
-
 class Sysfeedback
 {
-    private static $types = array(
+    /**
+     * types of messages
+     * @var array
+     */
+    private static $types = array (
         'success',
         'error',
         'warning',
+        'info',
     );
 
-    private static $format = '<div class="alert alert-:class">:message</div>';
+    /**
+     * format to display messages
+     * @var string
+     */
+    private static $format = '<div class="message-:type">:message</div>';
 
+    /**
+     * print all messages
+     * @param  string $format format to display
+     * @return  null
+     */
     public static function render($format = '')
     {
         foreach (self::$types as $type) {
@@ -31,35 +37,49 @@ class Sysfeedback
         }
     }
 
+    /**
+     * add a message to session
+     * @param string $type
+     * @param string $message
+     */
     private static function addMessage($type, $message)
     {
+        // get current messages as array
         $messages = (array) \Session::get($type);
         $messages[] = $message;
+
         \Session::put($type, $messages);
     }
 
-    private static function html($class, $messages, $format = '')
+    /**
+     * format the message
+     * Multiple messages from the same type are grouped into one message,
+     * separated by `<br />`.
+     * 
+     * @param  string $type type of message
+     * @param  array  $messages array with all messages
+     * @param  string $format template
+     * @return null
+     */
+    private static function html($type, $messages, $format = '')
     {
         $format = ($format) ?: self::$format;
         $messages = implode('<br />', $messages);
 
         $output = str_replace(array(
             ':message',
-            ':class',
+            ':type',
         ), array (
             $messages,
-            $class
+            $type
         ), $format);
 
-        // echo '<div class="alert alert-'.$class.'">';
-        // foreach ($messages as $msg) {
-        //     echo $msg.'<br />';
-        // }
-        // echo '</div>';
-        
         echo $output;
     }
 
+    /**
+     * shortcut to addMessage
+     */
     public static function __callStatic($type, $args)
     {
         if (!in_array($type, self::$types)) {
