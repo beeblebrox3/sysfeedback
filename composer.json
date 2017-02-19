@@ -2,8 +2,8 @@
     "name": "beeblebrox3/sysfeedback",
     "author": {
         "name": "Luís Henrique",
-        "email": "luque@luque.cc",
-        "homepage": "http://www.luque.cc/"
+        "email": "luis@luish.com.br",
+        "homepage": "http://www.luish.com.br/"
     },
     "require": {
         "php": ">=5.3.0",
